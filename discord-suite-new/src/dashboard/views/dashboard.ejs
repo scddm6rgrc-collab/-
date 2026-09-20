@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title><%= brand.name %></title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">🤖 <span><%= brand.name %></span></div>
+    <button class="nav active" data-tab="home">🏠 الرئيسية</button>
+    <button class="nav" data-tab="tickets">🎫 التكت</button>
+    <button class="nav" data-tab="messages">💬 الرسائل</button>
+    <button class="nav" data-tab="roles">🎭 الرولات</button>
+    <button class="nav" data-tab="events">🎉 الفعاليات</button>
+    <button class="nav" data-tab="guide">📘 دليل المشرفين</button>
+    <div class="sidebar-foot">
+      <div class="user-chip">👤 <%= user.globalName || user.username %></div>
+      <a href="/auth/logout">تسجيل خروج</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">لوحة التحكم</h1>
+        <div id="guildMeta" class="muted">اختر سيرفر</div>
+      </div>
+      <select id="guildSelect" class="control guild-select">
+        <% guilds.forEach(g => { %>
+          <option value="<%= g.id %>"><%= g.name %></option>
+        <% }) %>
+      </select>
+    </header>
+
+    <div id="notice" class="notice hidden"></div>
+
+    <section class="tab active" id="tab-home">
+      <div class="hero-card">
+        <img id="guildIcon" class="guild-icon" alt="">
+        <div>
+          <h2 id="guildName">—</h2>
+          <p id="guildStats" class="muted">—</p>
+        </div>
+      </div>
+      <div class="cards three">
+        <div class="card"><b id="roleCount">0</b><span>رول</span></div>
+        <div class="card"><b id="channelCount">0</b><span>روم</span></div>
+        <div class="card"><b id="memberCount">0</b><span>عضو</span></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-tickets">
+      <h2>🎫 نظام التكت القابل للتعديل</h2>
+      <form class="panel" method="post" action="/tickets/save">
+        <input type="hidden" name="guildId" class="guild-id">
+        <div class="toggle-row"><div><b>تشغيل النظام</b><small>يمكنك إيقاف فتح التذاكر بدون حذف الإعدادات.</small></div><input type="checkbox" name="enabled" id="ticketEnabled"></div>
+        <div class="grid two">
+          <label>روم لوحة التكت<select class="control text-channels" name="panelChannelId" id="ticketPanelChannel"></select></label>
+          <label>Category التكت<select class="control categories" name="categoryId" id="ticketCategory"></select></label>
+          <label>روم Transcript<select class="control text-channels" name="transcriptChannelId" id="ticketTranscript"></select></label>
+          <label>شكل زر الفتح<select class="control" name="buttonStyle" id="ticketButtonStyle"><option>Primary</option><option>Secondary</option><option>Success</option><option>Danger</option></select></label>
+        </div>
+        <label>رولات الإدارة<div id="ticketStaffRoles" class="check-grid"></div></label>
+        <div class="grid two">
+          <label>عنوان اللوحة<input class="control" name="panelTitle" id="ticketTitle"></label>
+          <label>لون اللوحة<input class="control color" type="color" name="panelColor" id="ticketColor"></label>
+          <label>نص الزر<input class="control" name="buttonLabel" id="ticketButtonLabel"></label>
+          <label>إيموجي الزر<input class="control" name="buttonEmoji" id="ticketButtonEmoji"></label>
+          <label>اسم التكت<input class="control" name="ticketNamePattern" id="ticketNamePattern"><small>استخدم {user}</small></label>
+          <label>رابط صورة اللوحة<input class="control" name="panelImage" id="ticketImage" placeholder="https://..."></label>
+          <label>نص زر الإغلاق<input class="control" name="closeLabel" id="ticketCloseLabel"></label>
+          <label>إيموجي الإغلاق<input class="control" name="closeEmoji" id="ticketCloseEmoji"></label>
+        </div>
+        <label>وصف اللوحة<textarea class="control" name="panelDescription" id="ticketDescription"></textarea></label>
+        <label>رسالة داخل التكت<textarea class="control" name="welcomeMessage" id="ticketWelcome"></textarea><small>استخدم {user} لمنشن صاحب التكت.</small></label>
+        <button class="btn primary">💾 حفظ إعدادات التكت</button>
+      </form>
+      <form class="panel compact" method="post" action="/tickets/publish">
+        <input type="hidden" name="guildId" class="guild-id">
+        <button class="btn success">📨 نشر لوحة التكت الآن</button>
+      </form>
+    </section>
+
+    <section class="tab" id="tab-messages">
+      <h2>💬 مركز نشر وتعديل وحذف الرسائل</h2>
+      <form class="panel" method="post" action="/messages/send">
+        <input type="hidden" name="guildId" class="guild-id">
+        <label>الروم<select class="control text-channels" name="channelId" required></select></label>
+        <label>النص العادي<textarea class="control" name="content"></textarea></label>
+        <div class="grid two">
+          <label>عنوان Embed<input class="control" name="title"></label>
+          <label>اللون<input class="control color" type="color" name="color" value="#5865F2"></label>
+          <label>عنوان فرعي<input class="control" name="subtitle"></label>
+          <label>النص تحت العنوان الفرعي<input class="control" name="subtext"></label>
+          <label>صورة في النهاية<input class="control" name="image" placeholder="https://..."></label>
+          <label>Footer<input class="control" name="footer"></label>
+        </div>
+        <label>وصف Embed<textarea class="control" name="description"></textarea></label>
+        <button class="btn primary">نشر الرسالة</button>
+      </form>
+
+      <div class="panel">
+        <h3>تعديل / حذف رسالة للبوت</h3>
+        <div class="grid two">
+          <label>الروم<select class="control text-channels" id="messageManageChannel"></select></label>
+          <label>رسائل البوت الأخيرة<select class="control" id="recentBotMessages"><option value="">اختر الروم أولاً</option></select></label>
+        </div>
+        <form method="post" action="/messages/edit" class="stack">
+          <input type="hidden" name="guildId" class="guild-id">
+          <input type="hidden" name="channelId" id="editChannelId">
+          <input type="hidden" name="messageId" id="editMessageId">
+          <label>النص الجديد<textarea class="control" name="content" required></textarea></label>
+          <button class="btn primary">تعديل الرسالة</button>
+        </form>
+        <form method="post" action="/messages/delete" onsubmit="return confirm('حذف الرسالة؟')">
+          <input type="hidden" name="guildId" class="guild-id">
+          <input type="hidden" name="channelId" id="deleteChannelId">
+          <input type="hidden" name="messageId" id="deleteMessageId">
+          <button class="btn danger">🗑️ حذف الرسالة المختارة</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-roles">
+      <h2>🎭 تعديل كل الرولات</h2>
+      <form class="panel" method="post" action="/roles/update">
+        <input type="hidden" name="guildId" class="guild-id">
+        <label>اختر الرول<select class="control editable-roles" name="roleId" id="roleEditorSelect" required></select></label>
+        <div class="grid two">
+          <label>اسم الرول<input class="control" name="name" id="roleName"></label>
+          <label>اللون<input class="control color" type="color" name="color" id="roleColor"></label>
+        </div>
+        <div class="toggle-row"><span>إظهار الرول منفصلًا في قائمة الأعضاء</span><input type="checkbox" name="hoist" id="roleHoist"></div>
+        <div class="toggle-row"><span>السماح بمنشن الرول</span><input type="checkbox" name="mentionable" id="roleMentionable"></div>
+        <h3>Permissions</h3>
+        <div id="permissionGrid" class="check-grid permissions"></div>
+        <button class="btn primary">💾 حفظ الرول</button>
+      </form>
+
+      <form class="panel" method="post" action="/roles/clone">
+        <input type="hidden" name="guildId" class="guild-id">
+        <h3>نسخ صلاحيات رول إلى عدة رولات</h3>
+        <label>الرول المصدر<select class="control editable-roles" name="sourceRoleId" required></select></label>
+        <label>الرولات الهدف<div id="cloneTargets" class="check-grid"></div></label>
+        <button class="btn warning">نسخ Permissions</button>
+      </form>
+    </section>
+
+    <section class="tab" id="tab-events">
+      <h2>🎉 نشر فعالية</h2>
+      <form class="panel" method="post" action="/events/publish">
+        <input type="hidden" name="guildId" class="guild-id">
+        <label>الروم<select class="control text-channels" name="channelId" required></select></label>
+        <label>نص فوق الـEmbed<textarea class="control" name="content"></textarea></label>
+        <div class="grid two">
+          <label>العنوان<input class="control" name="title"></label>
+          <label>اللون<input class="control color" type="color" name="color" value="#5865F2"></label>
+          <label>عنوان تحته<input class="control" name="subtitle"></label>
+          <label>النص تحت العنوان<input class="control" name="subtext"></label>
+          <label>الصورة في الأخير<input class="control" name="image" placeholder="https://..."></label>
+          <label>Footer<input class="control" name="footer"></label>
+        </div>
+        <label>الوصف الرئيسي<textarea class="control tall" name="description"></textarea></label>
+        <button class="btn primary">🎉 نشر الفعالية</button>
+      </form>
+      <p class="muted">Discord لا يدعم تلوين حروف النص بحرية؛ اختيار اللون هنا يلوّن شريط الـEmbed.</p>
+    </section>
+
+    <section class="tab" id="tab-guide">
+      <h2>📘 روم شرح للمشرفين</h2>
+      <div class="panel">
+        <p>ينشئ البوت روم <code>bot-mod-guide</code> ويضع فيه شرح التكت، الرسائل، الرولات، الفعاليات وطريقة استخدام الداشبورد.</p>
+        <form method="post" action="/guide/publish">
+          <input type="hidden" name="guildId" class="guild-id">
+          <button class="btn primary">إنشاء / تحديث روم الشرح</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

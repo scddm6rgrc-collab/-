@@ -1,0 +1,51 @@
+{
+  "1541842854861611088": {
+    "dashboardHistory": [
+      {
+        "at": "2026-09-20T09:53:53.611Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "guide.publish",
+        "details": {
+          "channelId": "1550946905817751626"
+        }
+      },
+      {
+        "at": "2026-09-19T19:10:08.069Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "guide.publish",
+        "details": {
+          "channelId": "1550946905817751626"
+        }
+      },
+      {
+        "at": "2026-09-19T19:09:22.998Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "guide.publish",
+        "details": {
+          "channelId": "1550946905817751626"
+        }
+      },
+      {
+        "at": "2026-09-19T19:09:20.927Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "guide.publish",
+        "details": {
+          "channelId": "1550946905817751626"
+        }
+      },
+      {
+        "at": "2026-09-19T19:09:18.358Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "guide.publish",
+        "details": {
+          "channelId": "1550946905817751626"
+        }
+      }
+    ]
+  }
+}
