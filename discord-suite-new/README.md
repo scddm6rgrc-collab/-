@@ -1,4 +1,4 @@
-# Discord Control Suite — مشروع جديد من الصفر
+# Discord Control Suite — 
 
 هذا المشروع لا يستخدم الكود السابق. بنيته Modular بحيث كل قسم معزول، و`src/index.js` فقط يربط الأقسام.
 
