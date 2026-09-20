@@ -41,8 +41,10 @@ module.exports = function startDashboard(client, context) {
   app.use("/tickets", requireAuth, require("./routes/tickets")(client, context));
   app.use("/messages", requireAuth, require("./routes/messages")(client, context));
   app.use("/roles", requireAuth, require("./routes/roles")(client, context));
+  app.use("/colors", requireAuth, require("./routes/colors")(client, context));
   app.use("/events", requireAuth, require("./routes/events")(client, context));
   app.use("/guide", requireAuth, require("./routes/guide")(client, context));
+  app.use("/levels", requireAuth, require("./routes/levels")(client, context));
 
   app.listen(config.web.port, "0.0.0.0", () => {
     console.log(`🌐 Dashboard: port ${config.web.port}`);

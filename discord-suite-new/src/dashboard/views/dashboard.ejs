@@ -13,6 +13,12 @@
     <button class="nav" data-tab="tickets">🎫 التكت</button>
     <button class="nav" data-tab="messages">💬 الرسائل</button>
     <button class="nav" data-tab="roles">🎭 الرولات</button>
+
+    <button class="nav" data-tab="colors">🎨 ألوان الأعضاء</button>
+    <button
+      class="nav"
+      onclick="window.location.href='/levels/' + document.getElementById('guildSelect').value"
+    >⭐ اللفلات</button>
     <button class="nav" data-tab="events">🎉 الفعاليات</button>
     <button class="nav" data-tab="guide">📘 دليل المشرفين</button>
     <div class="sidebar-foot">
@@ -48,6 +54,41 @@
         <div class="card"><b id="roleCount">0</b><span>رول</span></div>
         <div class="card"><b id="channelCount">0</b><span>روم</span></div>
         <div class="card"><b id="memberCount">0</b><span>عضو</span></div>
+      </div>
+
+      <div class="panel">
+        <h2>🤖 روم أوامر البوت</h2>
+
+        <p class="muted">
+          اختر الروم الوحيد الذي يسمح فيه باستخدام
+          أوامر مثل /rank و /leaderboard.
+        </p>
+
+        <form
+          method="post"
+          action="/api/guild/command-channel"
+        >
+          <input
+            type="hidden"
+            name="guildId"
+            class="guild-id"
+          >
+
+          <label>
+            روم الأوامر
+
+            <select
+              class="control text-channels"
+              name="commandChannelId"
+              id="commandChannelSelect"
+              required
+            ></select>
+          </label>
+
+          <button class="btn primary">
+            💾 حفظ روم الأوامر
+          </button>
+        </form>
       </div>
     </section>
 
@@ -147,6 +188,114 @@
         <button class="btn warning">نسخ Permissions</button>
       </form>
     </section>
+
+    <section class="tab" id="tab-colors">
+
+      <h2>🎨 ألوان أسماء الأعضاء</h2>
+
+      <form
+        class="panel"
+        method="post"
+        action="/colors/save"
+      >
+
+        <input
+          type="hidden"
+          name="guildId"
+          class="guild-id"
+        >
+
+        <label>
+          روم لوحة الألوان
+
+          <select
+            class="control text-channels"
+            name="channelId"
+            id="colorRolesChannel"
+            required
+          ></select>
+        </label>
+
+
+        <div class="grid two">
+
+          <label>
+            عنوان اللوحة
+
+            <input
+              class="control"
+              name="title"
+              id="colorRolesTitle"
+              value="🎨 اختر لون اسمك"
+            >
+          </label>
+
+
+          <label>
+            لون الـEmbed
+
+            <input
+              class="control color"
+              type="color"
+              name="embedColor"
+              id="colorRolesEmbedColor"
+              value="#5865F2"
+            >
+          </label>
+
+
+          <label>
+            نص الزر
+
+            <input
+              class="control"
+              name="buttonLabel"
+              id="colorRolesButtonLabel"
+              value="اختر لونك"
+            >
+          </label>
+
+        </div>
+
+
+        <label>
+          وصف اللوحة
+
+          <textarea
+            class="control"
+            name="description"
+            id="colorRolesDescription"
+          >اضغط الزر ثم اختر اللون الذي تريده.</textarea>
+        </label>
+
+
+        <button class="btn primary">
+          💾 حفظ إعدادات الألوان
+        </button>
+
+      </form>
+
+
+      <form
+        class="panel compact"
+        method="post"
+        action="/colors/publish"
+      >
+
+        <input
+          type="hidden"
+          name="guildId"
+          class="guild-id"
+        >
+
+        <button class="btn success">
+          🎨 نشر لوحة الألوان
+        </button>
+
+      </form>
+
+    </section>
+
 
     <section class="tab" id="tab-events">
       <h2>🎉 نشر فعالية</h2>

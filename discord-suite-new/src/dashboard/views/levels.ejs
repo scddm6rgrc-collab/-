@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Levels - <%= guild.name %></title>
+<link rel="stylesheet" href="/style.css">
+
+<style>
+.level-page {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.preview {
+  padding: 25px;
+  border-radius: 22px;
+  background: #111827;
+  margin-bottom: 25px;
+}
+
+.preview-bar {
+  height: 48px;
+  border-radius: 30px;
+  background: #242936;
+  overflow: hidden;
+}
+
+.preview-fill {
+  height: 100%;
+  width: 70%;
+  border-radius: 30px;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  font-weight:bold;
+}
+
+.top-row {
+  padding: 12px;
+  margin: 8px 0;
+  background: #1d2029;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="level-page">
+
+<a class="btn" href="/">← رجوع للداشبورد</a>
+
+<h1>⭐ Levels — <%= guild.name %></h1>
+
+
+<div class="panel">
+
+<h2>⚙️ XP Settings</h2>
+
+<form method="post" action="/levels/<%= guild.id %>/settings">
+
+<label>
+<input
+  type="checkbox"
+  name="enabled"
+  <%= settings.enabled ? "checked" : "" %>
+>
+تشغيل نظام XP
+</label>
+
+<div class="grid two">
+
+<label>
+Minimum XP
+<input class="control" type="number" name="minXp" value="<%= settings.minXp %>">
+</label>
+
+<label>
+Maximum XP
+<input class="control" type="number" name="maxXp" value="<%= settings.maxXp %>">
+</label>
+
+<label>
+Cooldown
+<input class="control" type="number" name="cooldownSeconds" value="<%= settings.cooldownSeconds %>">
+</label>
+
+</div>
+
+<button class="btn primary">
+💾 حفظ XP
+</button>
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>🎨 Rank Card</h2>
+
+<div
+  class="preview"
+  style="
+  <% if(theme.backgroundImage){ %>
+    background-image:url('<%= theme.backgroundImage %>');
+    background-size:cover;
+  <% } %>
+  "
+>
+
+<h2 style="color:<%= theme.textColor %>">
+Example User — #1 — Level 10
+</h2>
+
+<div class="preview-bar">
+
+<div
+  class="preview-fill"
+  style="
+    width:70%;
+    background:<%= theme.progressBarColor %>;
+    color:<%= theme.barTextColor %>
+  "
+>
+70%
+</div>
+
+</div>
+
+</div>
+
+
+<form method="post" action="/levels/<%= guild.id %>/theme">
+
+<label>
+Background Image URL
+<input
+  class="control"
+  name="backgroundImage"
+  value="<%= theme.backgroundImage %>"
+  placeholder="https://..."
+>
+</label>
+
+
+<div class="grid two">
+
+<label>
+Progress Bar
+<input
+  type="color"
+  class="control"
+  name="progressBarColor"
+  value="<%= theme.progressBarColor %>"
+>
+</label>
+
+<label>
+Avatar Circle
+<input
+  type="color"
+  class="control"
+  name="circleColor"
+  value="<%= theme.circleColor %>"
+>
+</label>
+
+<label>
+Text
+<input
+  type="color"
+  class="control"
+  name="textColor"
+  value="<%= theme.textColor %>"
+>
+</label>
+
+<label>
+Bar Text
+<input
+  type="color"
+  class="control"
+  name="barTextColor"
+  value="<%= theme.barTextColor %>"
+>
+</label>
+
+</div>
+
+<button class="btn primary">
+🎨 حفظ الشكل
+</button>
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>🛠️ Admin XP Manager</h2>
+
+<form method="post" action="/levels/<%= guild.id %>/xp">
+
+<label>
+العضو
+
+<select class="control" name="userId" required>
+
+<% members.forEach(member => { %>
+
+<option value="<%= member.id %>">
+<%= member.displayName %>
+</option>
+
+<% }) %>
+
+</select>
+
+</label>
+
+
+<label>
+XP
+<input
+  class="control"
+  type="number"
+  name="amount"
+  value="100"
+>
+</label>
+
+
+<label>
+العملية
+
+<select class="control" name="action">
+
+<option value="add">
++ Add XP
+</option>
+
+<option value="remove">
+- Remove XP
+</option>
+
+<option value="set">
+Set XP
+</option>
+
+<option value="reset">
+Reset XP
+</option>
+
+</select>
+
+</label>
+
+<button class="btn warning">
+تطبيق
+</button>
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>🏆 Top 10</h2>
+
+<% top.forEach((item, index) => { %>
+
+<div class="top-row">
+
+<b>
+#<%= index + 1 %>
+<%= item.name %>
+</b>
+
+—
+Level <%= item.level %>
+
+—
+<%= item.xp.toLocaleString() %> XP
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>
+
+</body>
+</html>

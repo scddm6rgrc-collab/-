@@ -5,13 +5,16 @@ const JsonStore = require("./core/store");
 const makeAudit = require("./core/audit");
 const { loadModules } = require("./core/moduleLoader");
 const startDashboard = require("./dashboard/app");
+const commandGate = require("./core/commandGate");
 
 const modules = [
   require("./modules/tickets"),
   require("./modules/messages"),
   require("./modules/roles"),
   require("./modules/eventsPublisher"),
-  require("./modules/modGuide")
+  require("./modules/modGuide"),
+  require("./modules/levels"),
+  require("./modules/colorRoles")
 ];
 
 const client = new Client({
@@ -24,6 +27,7 @@ const client = new Client({
 });
 
 const store = new JsonStore(config.files.settings);
+commandGate.configure(store);
 const context = {
   config,
   constants,

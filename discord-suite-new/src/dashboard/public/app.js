@@ -35,8 +35,45 @@ function render(data){
   const categories=channels.filter(c=>c.type===4);
   const editableRoles=roles.filter(r=>r.editable&&!r.managed&&r.id!==guild.id);
   document.querySelectorAll(".text-channels").forEach(s=>options(s,textChannels,"اختر روم"));
+
+  setSelected(
+    "commandChannelSelect",
+    settings.commandChannelId || ""
+  );
   document.querySelectorAll(".categories").forEach(s=>options(s,categories,"بدون Category"));
   document.querySelectorAll(".editable-roles").forEach(s=>options(s,editableRoles,"اختر رول"));
+
+  const colorRoles=settings.colorRoles||{};
+
+  setSelected(
+    "colorRolesChannel",
+    colorRoles.channelId
+  );
+
+  const colorTitle=document.getElementById("colorRolesTitle");
+  if(colorTitle)
+    colorTitle.value=
+      colorRoles.title||
+      "🎨 اختر لون اسمك";
+
+  const colorDescription=document.getElementById("colorRolesDescription");
+  if(colorDescription)
+    colorDescription.value=
+      colorRoles.description||
+      "اضغط الزر ثم اختر اللون الذي تريده.";
+
+  const colorEmbed=document.getElementById("colorRolesEmbedColor");
+  if(colorEmbed)
+    colorEmbed.value=
+      colorRoles.embedColor||
+      "#5865F2";
+
+  const colorButton=document.getElementById("colorRolesButtonLabel");
+  if(colorButton)
+    colorButton.value=
+      colorRoles.buttonLabel||
+      "اختر لونك";
+
 
   const t=settings.tickets||{};
   document.getElementById("ticketEnabled").checked=t.enabled!==false;

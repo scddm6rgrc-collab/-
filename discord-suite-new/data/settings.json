@@ -2,6 +2,49 @@
   "1541842854861611088": {
     "dashboardHistory": [
       {
+        "at": "2026-09-20T18:04:05.333Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "colorRoles.publish",
+        "details": {
+          "channelId": "1545929272751956019"
+        }
+      },
+      {
+        "at": "2026-09-20T18:03:58.102Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "colorRoles.save",
+        "details": {
+          "channelId": "1545929272751956019"
+        }
+      },
+      {
+        "at": "2026-09-20T17:27:15.666Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "levels.xp.update",
+        "details": {
+          "target": "ali_00556",
+          "action": "add",
+          "amount": 100
+        }
+      },
+      {
+        "at": "2026-09-20T17:26:17.081Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "levels.settings.update",
+        "details": {}
+      },
+      {
+        "at": "2026-09-20T17:26:14.311Z",
+        "userId": "1382963449851543562",
+        "username": "ali_00556",
+        "action": "levels.settings.update",
+        "details": {}
+      },
+      {
         "at": "2026-09-20T09:53:53.611Z",
         "userId": "1382963449851543562",
         "username": "ali_00556",
@@ -46,6 +89,13 @@
           "channelId": "1550946905817751626"
         }
       }
-    ]
+    ],
+    "colorRoles": {
+      "channelId": "1545929272751956019",
+      "title": "🎨 اختر لون اسمك",
+      "description": "اضغط الزر ثم اختر اللون الذي تريده.",
+      "embedColor": "#00d5ff",
+      "buttonLabel": "اختر لونك"
+    }
   }
 }

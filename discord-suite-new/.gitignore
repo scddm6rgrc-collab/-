@@ -8,3 +8,10 @@ node_modules/
 
 .env
 node_modules/
+data/levels.json
+
+data/levels.json
+data/rankCardSettings.json
+
+*.bak
+.gitignore]

@@ -55,5 +55,80 @@ module.exports = function guildRoutes(client, context) {
     }
   });
 
+
+  // ==========================================
+  // COMMAND CHANNEL
+  // ==========================================
+
+  router.post(
+    "/command-channel",
+    requireGuildAccess,
+    async (req, res) => {
+      try {
+        const guildId =
+          req.body.guildId;
+
+        const channelId =
+          req.body.commandChannelId || "";
+
+        const guild =
+          client.guilds.cache.get(guildId);
+
+        if (!guild) {
+          return res
+            .status(404)
+            .send("السيرفر غير موجود");
+        }
+
+        if (channelId) {
+          const channel =
+            guild.channels.cache.get(
+              channelId
+            ) ||
+            await guild.channels
+              .fetch(channelId)
+              .catch(() => null);
+
+          if (
+            !channel ||
+            !channel.isTextBased()
+          ) {
+            return res
+              .status(400)
+              .send("الروم غير صالح");
+          }
+        }
+
+        context.store.patchGuild(
+          guildId,
+          {
+            commandChannelId:
+              channelId
+          }
+        );
+
+        context.audit(
+          guildId,
+          req.session.user,
+          "command-channel.update",
+          {
+            channelId
+          }
+        );
+
+        res.redirect(
+          `/?guild=${guildId}`
+        );
+
+      } catch (error) {
+        console.error(error);
+
+        res.status(500).send(
+          "خطأ أثناء حفظ روم الأوامر"
+        );
+      }
+    }
+  );
+
   return router;
 };
