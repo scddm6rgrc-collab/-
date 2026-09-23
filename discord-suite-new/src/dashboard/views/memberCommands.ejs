@@ -1,0 +1,167 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>أوامر الأعضاء</title>
+
+<link
+  rel="stylesheet"
+  href="/style.css"
+>
+
+</head>
+
+
+<body>
+
+<div
+  style="
+    max-width:1000px;
+    margin:30px auto;
+    padding:20px
+  "
+>
+
+
+<a
+  class="btn primary"
+  href="/?guild=<%= guild.id %>"
+>
+  ← رجوع
+</a>
+
+
+<h1>
+  ⚡ أوامر الأعضاء
+</h1>
+
+
+<div class="panel">
+
+<p>
+  👤 الأعضاء يستخدمون
+  <b>!</b>
+  فقط.
+</p>
+
+<p>
+  🛡️ أوامر
+  <b>/</b>
+  للمشرفين فقط.
+</p>
+
+<p>
+  🚫 إذا كتب العضو الأمر في الشات العام
+  لن يعمل.
+</p>
+
+</div>
+
+
+<form
+  class="panel"
+  method="post"
+  action="/member-commands/<%= guild.id %>/save"
+>
+
+
+<% commands.forEach(command => { %>
+
+<div class="panel">
+
+<h3>
+  <%= command.name %>
+</h3>
+
+
+<div class="grid two">
+
+
+<label>
+
+  Slash للمشرف
+
+  <input
+    class="control"
+    value="<%= command.slash %>"
+    disabled
+  >
+
+</label>
+
+
+<label>
+
+  اختصار العضو
+
+  <input
+    class="control"
+    name="alias_<%= command.key %>"
+    value="<%= aliases[command.key] %>"
+    required
+  >
+
+</label>
+
+
+</div>
+
+
+<label>
+
+  الروم المسموح
+
+  <select
+    class="control"
+    name="room_<%= command.key %>"
+    required
+  >
+
+    <option value="">
+      اختر روم
+    </option>
+
+    <% channels.forEach(channel => { %>
+
+    <option
+      value="<%= channel.id %>"
+      <%= rooms[command.key] === channel.id ? "selected" : "" %>
+    >
+      # <%= channel.name %>
+    </option>
+
+    <% }) %>
+
+  </select>
+
+</label>
+
+
+</div>
+
+<% }) %>
+
+
+<button
+  class="btn success"
+>
+  💾 حفظ الأوامر والرومات
+</button>
+
+
+</form>
+
+</div>
+
+</body>
+
+</html>

@@ -35,6 +35,16 @@ module.exports = Object.freeze({
     rankCardSettings: path.join(
       __dirname,
       "../../data/rankCardSettings.json"
+    ),
+
+    credits: path.join(
+      __dirname,
+      "../../data/credits.json"
+    ),
+
+    gameRewards: path.join(
+      __dirname,
+      "../../data/gameRewards.json"
     )
   }
 });

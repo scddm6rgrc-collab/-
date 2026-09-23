@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Auto Replies</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div style="max-width:1100px;margin:30px auto;padding:20px">
+
+  <a class="btn primary" href="/?guild=<%= guild.id %>">
+    ← رجوع للداشبورد
+  </a>
+
+  <h1>💬 الردود التلقائية — <%= guild.name %></h1>
+
+  <div class="panel">
+    <h2>➕ رد تلقائي جديد</h2>
+
+    <form method="post" action="/auto-replies/<%= guild.id %>/save">
+
+      <div class="grid two">
+
+        <label>
+          إذا كتب العضو
+          <input
+            class="control"
+            name="trigger"
+            placeholder="مثال: السلام عليكم"
+            required
+          >
+        </label>
+
+        <label>
+          طريقة المطابقة
+          <select class="control" name="matchType">
+            <option value="exact">نفس الكلام بالضبط</option>
+            <option value="includes">يحتوي على</option>
+            <option value="startsWith">يبدأ بـ</option>
+            <option value="endsWith">ينتهي بـ</option>
+          </select>
+        </label>
+
+        <label>
+          الروم
+          <select class="control" name="channelId">
+            <option value="">كل الرومات</option>
+            <% channels.forEach(channel => { %>
+              <option value="<%= channel.id %>">
+                #<%= channel.name %>
+              </option>
+            <% }) %>
+          </select>
+        </label>
+
+        <label>
+          Cooldown بالثواني
+          <input
+            class="control"
+            type="number"
+            min="0"
+            name="cooldownSeconds"
+            value="3"
+          >
+        </label>
+
+        <label>
+          طريقة الرد
+          <select class="control" name="replyMode">
+            <option value="reply">Reply على الرسالة</option>
+            <option value="send">رسالة عادية</option>
+          </select>
+        </label>
+
+      </div>
+
+      <label>
+        رد البوت
+        <textarea
+          class="control"
+          name="response"
+          required
+          placeholder="وعليكم السلام {user} 👋"
+        ></textarea>
+      </label>
+
+      <p class="muted">
+        المتغيرات: {user} {username} {server} {channel}
+      </p>
+
+      <label>
+        <input type="checkbox" name="enabled" checked>
+        مفعّل
+      </label>
+
+      <label>
+        <input type="checkbox" name="caseSensitive">
+        التفريق بين الحروف الكبيرة والصغيرة
+      </label>
+
+      <br>
+
+      <button class="btn success">
+        ➕ إضافة الرد
+      </button>
+
+    </form>
+  </div>
+
+
+  <% rules.forEach(rule => { %>
+
+    <div class="panel">
+
+      <form method="post" action="/auto-replies/<%= guild.id %>/save">
+
+        <input type="hidden" name="id" value="<%= rule.id %>">
+
+        <h3>
+          🤖 <%= rule.trigger %>
+        </h3>
+
+        <div class="grid two">
+
+          <label>
+            Trigger
+            <input
+              class="control"
+              name="trigger"
+              value="<%= rule.trigger %>"
+              required
+            >
+          </label>
+
+          <label>
+            المطابقة
+            <select class="control" name="matchType">
+              <option value="exact" <%= rule.matchType === "exact" ? "selected" : "" %>>بالضبط</option>
+              <option value="includes" <%= rule.matchType === "includes" ? "selected" : "" %>>يحتوي على</option>
+              <option value="startsWith" <%= rule.matchType === "startsWith" ? "selected" : "" %>>يبدأ بـ</option>
+              <option value="endsWith" <%= rule.matchType === "endsWith" ? "selected" : "" %>>ينتهي بـ</option>
+            </select>
+          </label>
+
+          <label>
+            الروم
+            <select class="control" name="channelId">
+              <option value="">كل الرومات</option>
+              <% channels.forEach(channel => { %>
+                <option
+                  value="<%= channel.id %>"
+                  <%= rule.channelId === channel.id ? "selected" : "" %>
+                >
+                  #<%= channel.name %>
+                </option>
+              <% }) %>
+            </select>
+          </label>
+
+          <label>
+            Cooldown
+            <input
+              class="control"
+              type="number"
+              name="cooldownSeconds"
+              value="<%= rule.cooldownSeconds || 0 %>"
+            >
+          </label>
+
+        </div>
+
+        <label>
+          الرد
+          <textarea
+            class="control"
+            name="response"
+            required
+          ><%= rule.response %></textarea>
+        </label>
+
+        <label>
+          طريقة الرد
+          <select class="control" name="replyMode">
+            <option value="reply" <%= rule.replyMode !== "send" ? "selected" : "" %>>Reply</option>
+            <option value="send" <%= rule.replyMode === "send" ? "selected" : "" %>>رسالة عادية</option>
+          </select>
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="enabled"
+            <%= rule.enabled !== false ? "checked" : "" %>
+          >
+          مفعّل
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="caseSensitive"
+            <%= rule.caseSensitive ? "checked" : "" %>
+          >
+          Case Sensitive
+        </label>
+
+        <br>
+
+        <button class="btn primary">
+          💾 حفظ التعديل
+        </button>
+
+      </form>
+
+      <form
+        method="post"
+        action="/auto-replies/<%= guild.id %>/delete"
+        onsubmit="return confirm('حذف هذا الرد؟')"
+        style="margin-top:10px"
+      >
+        <input type="hidden" name="id" value="<%= rule.id %>">
+
+        <button class="btn danger">
+          🗑️ حذف
+        </button>
+      </form>
+
+    </div>
+
+  <% }) %>
+
+</div>
+
+</body>
+</html>

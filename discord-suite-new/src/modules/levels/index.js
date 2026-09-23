@@ -92,12 +92,53 @@ module.exports = {
               (max - min + 1)
           ) + min;
 
-        levels.addMessageXp(
-          message.guild.id,
-          message.author.id,
-          xp,
-          message.author.username
-        );
+        const oldStats =
+          levels.getUser(
+            message.guild.id,
+            message.author.id
+          );
+
+        const oldLevel =
+          levels.levelFromXp(
+            oldStats.xp
+          );
+
+        if (
+          context.services.credits
+        ) {
+          context.services.credits
+            .syncLevelRewards(
+              message.guild.id,
+              message.author.id,
+              oldLevel,
+              message.author.username
+            );
+        }
+
+        const updatedStats =
+          levels.addMessageXp(
+            message.guild.id,
+            message.author.id,
+            xp,
+            message.author.username
+          );
+
+        const newLevel =
+          levels.levelFromXp(
+            updatedStats.xp
+          );
+
+        if (
+          context.services.credits
+        ) {
+          context.services.credits
+            .syncLevelRewards(
+              message.guild.id,
+              message.author.id,
+              newLevel,
+              message.author.username
+            );
+        }
 
       }
     );
@@ -153,15 +194,17 @@ module.exports = {
         if (!interaction.isChatInputCommand())
           return;
 
-        if (!(await commandGate(interaction)))
-          return;
-
         if (
           !["leaderboard", "rank"]
             .includes(interaction.commandName)
         ) {
           return;
         }
+
+        // كل Slash للمشرفين فقط
+        // ويعمل فقط في رومه المحدد
+        if (!(await commandGate(interaction)))
+          return;
 
         await interaction.deferReply();
 

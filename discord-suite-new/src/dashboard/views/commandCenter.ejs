@@ -1,0 +1,459 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>مركز الأوامر</title>
+
+<link
+  rel="stylesheet"
+  href="/style.css"
+>
+
+</head>
+
+
+<body>
+
+<div
+  style="
+    max-width:1250px;
+    margin:30px auto;
+    padding:20px
+  "
+>
+
+
+<a
+  class="btn primary"
+  href="/?guild=<%= guild.id %>"
+>
+  ← رجوع
+</a>
+
+
+<h1>
+  ⚙️ مركز الأوامر
+</h1>
+
+
+<div class="panel">
+
+<h2>
+  نظام الأوامر
+</h2>
+
+<p>
+  🛡️ كل أوامر
+  <code>/</code>
+  للمشرفين فقط.
+</p>
+
+<p>
+  👤 الأعضاء يستخدمون
+  <code>!</code>.
+</p>
+
+<p>
+  🚫 كل أمر يعمل فقط داخل
+  الروم الذي تحدده هنا.
+</p>
+
+</div>
+
+
+<form
+  method="post"
+  action="/commands/<%= guild.id %>/save"
+>
+
+
+<!-- ================================================= -->
+<!-- GENERAL COMMANDS -->
+<!-- ================================================= -->
+
+<h2>
+  ⚡ أوامر الأعضاء
+</h2>
+
+
+<div class="grid two">
+
+<%
+memberCommands.forEach(
+  command => {
+%>
+
+<div class="panel">
+
+
+<h3>
+  <%= command.name %>
+</h3>
+
+
+<div class="grid two">
+
+<label>
+
+  أمر المشرف
+
+  <input
+    class="control"
+    value="<%= command.slash %>"
+    disabled
+  >
+
+</label>
+
+
+<label>
+
+  أمر العضو
+
+  <input
+    class="control"
+    name="member_alias_<%= command.key %>"
+    value="<%= memberAliases[command.key] %>"
+    required
+  >
+
+</label>
+
+</div>
+
+
+<label>
+
+  الروم المسموح
+
+  <select
+    class="control"
+    name="member_room_<%= command.key %>"
+    required
+  >
+
+    <option value="">
+      اختر الروم
+    </option>
+
+
+    <% channels.forEach(channel => { %>
+
+    <option
+      value="<%= channel.id %>"
+      <%= memberRooms[command.key] === channel.id ? "selected" : "" %>
+    >
+      # <%= channel.name %>
+    </option>
+
+    <% }) %>
+
+  </select>
+
+</label>
+
+
+</div>
+
+<%
+  }
+);
+%>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- GAME RULES -->
+<!-- ================================================= -->
+
+<h2>
+  🎮 إعدادات الألعاب
+</h2>
+
+
+<div class="panel">
+
+<div class="grid two">
+
+
+<label>
+
+  رسوم فتح لعبة جماعية
+
+  <input
+    class="control"
+    type="number"
+    name="multiplayerStartFee"
+    min="0"
+    value="<%= rules.multiplayerStartFee %>"
+  >
+
+  <small>
+    يدفعها صاحب الأمر فقط.
+  </small>
+
+</label>
+
+
+<label>
+
+  مكافأة الفوز بلعبة مشرفين
+
+  <input
+    class="control"
+    type="number"
+    name="staffWinReward"
+    min="0"
+    value="<%= rules.staffWinReward %>"
+  >
+
+</label>
+
+
+<label>
+
+  قفل المكافأة بعد عدد انتصارات متتالية
+
+  <input
+    class="control"
+    type="number"
+    name="staffMaxRewardStreak"
+    min="1"
+    value="<%= rules.staffMaxRewardStreak %>"
+  >
+
+</label>
+
+
+<label>
+
+  عدد الخسارات لفك القفل
+
+  <input
+    class="control"
+    type="number"
+    name="staffLossesToUnlock"
+    min="1"
+    value="<%= rules.staffLossesToUnlock %>"
+  >
+
+</label>
+
+
+</div>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- GAMES -->
+<!-- ================================================= -->
+
+<div class="grid two">
+
+<%
+games.forEach(
+  game => {
+%>
+
+<div class="panel">
+
+
+<h2>
+  <%= game.emoji %>
+  <%= game.name %>
+</h2>
+
+
+<div class="grid two">
+
+
+<label>
+
+  أمر المشرف
+
+  <input
+    class="control"
+    value="/<%= game.command %>"
+    disabled
+  >
+
+</label>
+
+
+<label>
+
+  أمر العضو
+
+  <input
+    class="control"
+    name="game_alias_<%= game.key %>"
+    value="<%= gameAliases[game.key] %>"
+    required
+  >
+
+</label>
+
+
+</div>
+
+
+<label>
+
+  روم اللعبة
+
+  <select
+    class="control"
+    name="game_room_<%= game.key %>"
+    required
+  >
+
+    <option value="">
+      اختر الروم
+    </option>
+
+
+    <% channels.forEach(channel => { %>
+
+    <option
+      value="<%= channel.id %>"
+      <%= gameRooms[game.key] === channel.id ? "selected" : "" %>
+    >
+      # <%= channel.name %>
+    </option>
+
+    <% }) %>
+
+  </select>
+
+</label>
+
+
+<label>
+
+  نوع اللعبة
+
+  <select
+    class="control"
+    name="game_mode_<%= game.key %>"
+  >
+
+    <option
+      value="public"
+      <%= gameModes[game.key] === "public" ? "selected" : "" %>
+    >
+      👥 عامة
+    </option>
+
+
+    <option
+      value="staff"
+      <%= gameModes[game.key] === "staff" ? "selected" : "" %>
+    >
+      🛡️ مشرفين فقط
+    </option>
+
+  </select>
+
+</label>
+
+
+<p class="muted">
+
+  عضو:
+  <b>
+    <%= gameAliases[game.key] %>
+  </b>
+
+  &nbsp; • &nbsp;
+
+  مشرف:
+  <b>
+    /<%= game.command %>
+  </b>
+
+</p>
+
+
+</div>
+
+<%
+  }
+);
+%>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- STAFF ROLES -->
+<!-- ================================================= -->
+
+<div class="panel">
+
+<h2>
+  🛡️ رولات المشرفين
+</h2>
+
+<p class="muted">
+  Administrator وManage Server
+  وModerate Members وManage Messages
+  يعتبرون مشرفين تلقائيًا.
+</p>
+
+
+<div class="check-grid">
+
+<% roles.forEach(role => { %>
+
+<label class="check-item">
+
+<input
+  type="checkbox"
+  name="staffRoleIds"
+  value="<%= role.id %>"
+  <%= staffRoleIds.includes(role.id) ? "checked" : "" %>
+>
+
+<%= role.name %>
+
+</label>
+
+<% }) %>
+
+</div>
+
+</div>
+
+
+<button
+  class="btn success"
+  style="
+    width:100%;
+    margin-top:20px
+  "
+>
+  💾 حفظ كل إعدادات الأوامر
+</button>
+
+
+</form>
+
+</div>
+
+</body>
+
+</html>

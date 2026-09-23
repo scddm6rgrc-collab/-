@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Help Center</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div style="max-width:1000px;margin:30px auto;padding:20px">
+
+  <a class="btn primary" href="/?guild=<%= guild.id %>">
+    ← رجوع للداشبورد
+  </a>
+
+  <h1>📚 مركز الأوامر — <%= guild.name %></h1>
+
+  <div class="panel">
+
+    <p class="muted">
+      البوت ينشر رسالة فيها أوامر /rank و /leaderboard
+      وكل Custom Commands والاختصارات.
+      بعد أول نشر، القائمة تتحدث تلقائيًا عندما تعدل الأوامر.
+    </p>
+
+    <form
+      method="post"
+      action="/help-center/<%= guild.id %>/save"
+    >
+
+      <label>
+        روم التعليمات
+
+        <select
+          class="control"
+          name="channelId"
+          required
+        >
+
+          <option value="">
+            اختر روم
+          </option>
+
+          <% channels.forEach(channel => { %>
+
+            <option
+              value="<%= channel.id %>"
+              <%= help.channelId === channel.id ? "selected" : "" %>
+            >
+              #<%= channel.name %>
+            </option>
+
+          <% }) %>
+
+        </select>
+
+      </label>
+
+      <div class="grid two">
+
+        <label>
+          العنوان
+
+          <input
+            class="control"
+            name="title"
+            value="<%= help.title || "📚 أوامر السيرفر" %>"
+          >
+        </label>
+
+        <label>
+          لون Embed
+
+          <input
+            class="control color"
+            type="color"
+            name="embedColor"
+            value="<%= help.embedColor || "#5865F2" %>"
+          >
+        </label>
+
+      </div>
+
+      <label>
+        الوصف
+
+        <textarea
+          class="control"
+          name="description"
+        ><%= help.description || "هنا تجد أوامر البوت وطريقة استخدامها." %></textarea>
+
+      </label>
+
+      <button class="btn primary">
+        💾 حفظ الإعدادات
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div class="panel compact">
+
+    <form
+      method="post"
+      action="/help-center/<%= guild.id %>/publish"
+    >
+
+      <button class="btn success">
+        📚 نشر / تحديث رسالة التعليمات
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>

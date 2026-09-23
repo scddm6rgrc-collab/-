@@ -1,0 +1,373 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>
+Credits & Bet
+</title>
+
+<link
+  rel="stylesheet"
+  href="/style.css"
+>
+
+</head>
+
+
+<body>
+
+
+<div
+  style="
+    max-width:1100px;
+    margin:30px auto;
+    padding:20px
+  "
+>
+
+
+<a
+  class="btn primary"
+  href="/?guild=<%= guild.id %>"
+>
+← رجوع للداشبورد
+</a>
+
+
+<h1>
+💳 Credits & Bet — <%= guild.name %>
+</h1>
+
+
+<div class="panel">
+
+<h2>
+💳 Credits System
+</h2>
+
+<p class="muted">
+
+كل عضو يبدأ بـ 0 Credits.
+
+</p>
+
+<p>
+
+Level 10 → +1<br>
+Level 20 → +1<br>
+Level 30 → +1<br>
+Level 40 → +1<br>
+Level 50 → +1<br>
+Level 75 → +1<br>
+Level 100 → +1<br>
+Level 200 → +2<br>
+Level 300 → +2<br>
+Level 400 → +2<br>
+Level 500 → +2
+
+</p>
+
+<p class="muted">
+
+بعد Level 500 لا توجد مكافآت Level إضافية.
+
+إذا كان رصيد العضو 100 Credits أو أكثر،
+لن يحصل على Credits جديدة من Level Rewards.
+
+لكن أرباح الألعاب المستقبلية تستطيع رفع الرصيد فوق 100.
+
+</p>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+🎲 إعدادات Bet
+</h2>
+
+
+<form
+  method="post"
+  action="/economy/<%= guild.id %>/settings"
+>
+
+
+<label>
+
+<input
+  type="checkbox"
+  name="enabled"
+  <%= settings.enabled ? "checked" : "" %>
+>
+
+تشغيل Credits / Bet
+
+</label>
+
+
+<h3>
+📍 الرومات المسموحة
+</h3>
+
+<p class="muted">
+تقدر تختار أكثر من روم.
+الألعاب التي نضيفها لاحقًا ستعمل فقط في هذه الرومات.
+</p>
+
+
+<div class="check-grid">
+
+<% channels.forEach(channel => { %>
+
+<label class="check-item">
+
+<input
+  type="checkbox"
+  name="allowedChannelIds"
+  value="<%= channel.id %>"
+  <%= settings.allowedChannelIds.includes(channel.id) ? "checked" : "" %>
+>
+
+#<%= channel.name %>
+
+</label>
+
+<% }) %>
+
+</div>
+
+
+<div class="grid two">
+
+<label>
+
+أقل Bet
+
+<input
+  class="control"
+  type="number"
+  min="1"
+  name="minBet"
+  value="<%= settings.minBet %>"
+>
+
+</label>
+
+
+<label>
+
+أكبر Bet
+
+<input
+  class="control"
+  type="number"
+  min="1"
+  name="maxBet"
+  value="<%= settings.maxBet %>"
+>
+
+</label>
+
+</div>
+
+
+<button class="btn primary">
+
+💾 حفظ إعدادات Bet
+
+</button>
+
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+🛠️ إدارة Credits
+</h2>
+
+
+<form
+  method="post"
+  action="/economy/<%= guild.id %>/credits"
+>
+
+
+<label>
+
+العضو
+
+<select
+  class="control"
+  name="userId"
+  required
+>
+
+<% members.forEach(member => { %>
+
+<option value="<%= member.id %>">
+
+<%= member.displayName %>
+
+</option>
+
+<% }) %>
+
+</select>
+
+</label>
+
+
+<div class="grid two">
+
+
+<label>
+
+العملية
+
+<select
+  class="control"
+  name="action"
+>
+
+<option value="add">
++ Add
+</option>
+
+<option value="remove">
+- Remove
+</option>
+
+<option value="set">
+Set
+</option>
+
+<option value="reset">
+Reset
+</option>
+
+</select>
+
+</label>
+
+
+<label>
+
+Credits
+
+<input
+  class="control"
+  type="number"
+  min="0"
+  name="amount"
+  value="1"
+>
+
+</label>
+
+
+</div>
+
+
+<button class="btn warning">
+
+تطبيق
+
+</button>
+
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+🏆 Top Credits
+</h2>
+
+
+<% if (!top.length) { %>
+
+<p class="muted">
+لا يوجد Credits حتى الآن.
+</p>
+
+<% } %>
+
+
+<% top.forEach((item, index) => { %>
+
+<div
+  style="
+    background:#11141b;
+    padding:12px;
+    margin:8px 0;
+    border-radius:10px
+  "
+>
+
+<b>
+
+#<%= index + 1 %>
+<%= item.name %>
+
+</b>
+
+—
+
+💳 <%= item.balance %>
+
+</div>
+
+<% }) %>
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+👤 أمر العضو
+</h2>
+
+<p>
+
+<code>/credits</code>
+
+— يعرض رصيد Credits والـLevel والمكافأة القادمة.
+
+</p>
+
+<p class="muted">
+
+ما أضفنا أي لعبة الآن.
+لما تعطيني الألعاب التي تريدها،
+نربط كل لعبة مباشرة بهذا Bet System.
+
+</p>
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

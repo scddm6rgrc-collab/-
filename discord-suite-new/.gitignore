@@ -15,3 +15,5 @@ data/rankCardSettings.json
 
 *.bak
 .gitignore]
+data/credits.json
+data/gameRewards.json

@@ -19,7 +19,45 @@
       class="nav"
       onclick="window.location.href='/levels/' + document.getElementById('guildSelect').value"
     >⭐ اللفلات</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/economy/' + document.getElementById('guildSelect').value"
+    >💳 Credits & Bet</button>
+
+
+    <button
+      class="nav"
+      onclick="window.location.href='/games/' + document.getElementById('guildSelect').value"
+    >🎮 الألعاب</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/member-commands/' + document.getElementById('guildSelect').value"
+    >⚡ أوامر الأعضاء</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/commands/' + document.getElementById('guildSelect').value"
+    >⚙️ مركز الأوامر</button>
+
     <button class="nav" data-tab="events">🎉 الفعاليات</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/auto-replies/' + document.getElementById('guildSelect').value"
+    >💬 الردود التلقائية</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/custom-commands/' + document.getElementById('guildSelect').value"
+    >⚡ الأوامر المخصصة</button>
+
+    <button
+      class="nav"
+      onclick="window.location.href='/help-center/' + document.getElementById('guildSelect').value"
+    >📚 مركز الأوامر</button>
+
     <button class="nav" data-tab="guide">📘 دليل المشرفين</button>
     <div class="sidebar-foot">
       <div class="user-chip">👤 <%= user.globalName || user.username %></div>
@@ -320,10 +358,17 @@
     <section class="tab" id="tab-guide">
       <h2>📘 روم شرح للمشرفين</h2>
       <div class="panel">
-        <p>ينشئ البوت روم <code>bot-mod-guide</code> ويضع فيه شرح التكت، الرسائل، الرولات، الفعاليات وطريقة استخدام الداشبورد.</p>
+        <p>
+          ينشئ أو يحدث البوت روم
+          <code>bot-mod-guide</code>
+          المخفي عن الأعضاء، ويضع فيه دليلًا كاملًا للمشرفين:
+          أوامر / و !، رومات الأوامر، الألعاب، Credits وBet،
+          اللفلات، التكت، الرولات، الرسائل، الألوان والفعاليات.
+          الدليل يقرأ الإعدادات الحالية من الداشبورد.
+        </p>
         <form method="post" action="/guide/publish">
           <input type="hidden" name="guildId" class="guild-id">
-          <button class="btn primary">إنشاء / تحديث روم الشرح</button>
+          <button class="btn primary">📘 إنشاء / تحديث دليل المشرفين</button>
         </form>
       </div>
     </section>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Custom Commands</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div style="max-width:1100px;margin:30px auto;padding:20px">
+
+  <a class="btn primary" href="/?guild=<%= guild.id %>">
+    ← رجوع للداشبورد
+  </a>
+
+  <h1>⚡ الأوامر المخصصة — <%= guild.name %></h1>
+
+  <div class="panel">
+
+    <h2>🔣 Prefix</h2>
+
+    <form
+      method="post"
+      action="/custom-commands/<%= guild.id %>/settings"
+    >
+
+      <label>
+        رمز الأوامر
+        <input
+          class="control"
+          name="prefix"
+          maxlength="5"
+          value="<%= commandSettings.prefix || "!" %>"
+        >
+      </label>
+
+      <button class="btn primary">
+        💾 حفظ Prefix
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <div class="panel">
+
+    <h2>➕ إنشاء أمر</h2>
+
+    <form
+      method="post"
+      action="/custom-commands/<%= guild.id %>/save"
+    >
+
+      <div class="grid two">
+
+        <label>
+          اسم الأمر
+          <input
+            class="control"
+            name="name"
+            placeholder="rules"
+            required
+          >
+        </label>
+
+        <label>
+          الاختصارات
+          <input
+            class="control"
+            name="aliases"
+            placeholder="قوانين, rule, q"
+          >
+        </label>
+
+        <label>
+          الوصف
+          <input
+            class="control"
+            name="description"
+            placeholder="عرض قوانين السيرفر"
+          >
+        </label>
+
+        <label>
+          Cooldown
+          <input
+            class="control"
+            type="number"
+            min="0"
+            name="cooldownSeconds"
+            value="3"
+          >
+        </label>
+
+        <label>
+          روم خاص لهذا الأمر
+          <select class="control" name="channelId">
+            <option value="">
+              استخدم روم الأوامر العام
+            </option>
+
+            <% channels.forEach(channel => { %>
+              <option value="<%= channel.id %>">
+                #<%= channel.name %>
+              </option>
+            <% }) %>
+
+          </select>
+        </label>
+
+        <label>
+          طريقة الرد
+          <select class="control" name="replyMode">
+            <option value="reply">Reply</option>
+            <option value="send">رسالة عادية</option>
+          </select>
+        </label>
+
+      </div>
+
+      <label>
+        الرد
+        <textarea
+          class="control"
+          name="response"
+          required
+          placeholder="أهلاً {user}"
+        ></textarea>
+      </label>
+
+      <p class="muted">
+        المتغيرات:
+        {user} {username} {server} {channel} {args}
+      </p>
+
+      <label>
+        <input
+          type="checkbox"
+          name="enabled"
+          checked
+        >
+        مفعّل
+      </label>
+
+      <br>
+
+      <button class="btn success">
+        ➕ إنشاء الأمر
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <% commands.forEach(command => { %>
+
+    <div class="panel">
+
+      <form
+        method="post"
+        action="/custom-commands/<%= guild.id %>/save"
+      >
+
+        <input
+          type="hidden"
+          name="id"
+          value="<%= command.id %>"
+        >
+
+        <h3>
+          ⚡ <%= commandSettings.prefix || "!" %><%= command.name %>
+        </h3>
+
+        <div class="grid two">
+
+          <label>
+            اسم الأمر
+            <input
+              class="control"
+              name="name"
+              value="<%= command.name %>"
+              required
+            >
+          </label>
+
+          <label>
+            الاختصارات
+            <input
+              class="control"
+              name="aliases"
+              value="<%= (command.aliases || []).join(", ") %>"
+            >
+          </label>
+
+          <label>
+            الوصف
+            <input
+              class="control"
+              name="description"
+              value="<%= command.description || "" %>"
+            >
+          </label>
+
+          <label>
+            Cooldown
+            <input
+              class="control"
+              type="number"
+              name="cooldownSeconds"
+              value="<%= command.cooldownSeconds || 0 %>"
+            >
+          </label>
+
+          <label>
+            الروم
+            <select class="control" name="channelId">
+
+              <option value="">
+                روم الأوامر العام
+              </option>
+
+              <% channels.forEach(channel => { %>
+
+                <option
+                  value="<%= channel.id %>"
+                  <%= command.channelId === channel.id ? "selected" : "" %>
+                >
+                  #<%= channel.name %>
+                </option>
+
+              <% }) %>
+
+            </select>
+          </label>
+
+          <label>
+            طريقة الرد
+            <select class="control" name="replyMode">
+
+              <option
+                value="reply"
+                <%= command.replyMode !== "send" ? "selected" : "" %>
+              >
+                Reply
+              </option>
+
+              <option
+                value="send"
+                <%= command.replyMode === "send" ? "selected" : "" %>
+              >
+                رسالة عادية
+              </option>
+
+            </select>
+          </label>
+
+        </div>
+
+        <label>
+          الرد
+          <textarea
+            class="control"
+            name="response"
+            required
+          ><%= command.response %></textarea>
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="enabled"
+            <%= command.enabled !== false ? "checked" : "" %>
+          >
+          مفعّل
+        </label>
+
+        <br>
+
+        <button class="btn primary">
+          💾 حفظ التعديل
+        </button>
+
+      </form>
+
+      <form
+        method="post"
+        action="/custom-commands/<%= guild.id %>/delete"
+        onsubmit="return confirm('حذف هذا الأمر؟')"
+        style="margin-top:10px"
+      >
+
+        <input
+          type="hidden"
+          name="id"
+          value="<%= command.id %>"
+        >
+
+        <button class="btn danger">
+          🗑️ حذف الأمر
+        </button>
+
+      </form>
+
+    </div>
+
+  <% }) %>
+
+</div>
+
+</body>
+</html>

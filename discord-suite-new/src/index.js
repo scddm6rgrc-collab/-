@@ -14,7 +14,14 @@ const modules = [
   require("./modules/eventsPublisher"),
   require("./modules/modGuide"),
   require("./modules/levels"),
-  require("./modules/colorRoles")
+  require("./modules/colorRoles"),
+  require("./modules/helpCenter"),
+  require("./modules/customCommands"),
+  require("./modules/autoReplies"),
+  require("./modules/credits"),
+  require("./modules/betting"),
+  require("./modules/games"),
+  require("./modules/staffPanel")
 ];
 
 const client = new Client({

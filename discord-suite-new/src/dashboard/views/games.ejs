@@ -1,0 +1,251 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>NATUS Games</title>
+
+<link
+  rel="stylesheet"
+  href="/style.css"
+>
+
+</head>
+
+
+<body>
+
+<div
+  style="
+    max-width:1200px;
+    margin:30px auto;
+    padding:20px
+  "
+>
+
+
+<a
+  class="btn primary"
+  href="/?guild=<%= guild.id %>"
+>
+  ← رجوع
+</a>
+
+
+<h1>
+  🎮 إعدادات الألعاب
+</h1>
+
+
+<div class="panel">
+
+  <b>
+    نظام الأوامر
+  </b>
+
+  <p>
+    👤 الأعضاء يستخدمون أوامر
+    <code>!</code>
+    فقط.
+  </p>
+
+  <p>
+    🛡️ أوامر
+    <code>/</code>
+    خاصة بالمشرفين.
+  </p>
+
+  <p>
+    🚫 اللعبة لن تعمل في الشات العام.
+    كل لعبة يجب أن يكون لها روم.
+  </p>
+
+</div>
+
+
+<form
+  method="post"
+  action="/games/<%= guild.id %>/save"
+>
+
+
+<div class="grid two">
+
+
+<% games.forEach(game => { %>
+
+<div class="panel">
+
+<h2>
+  <%= game.emoji %>
+  <%= game.name %>
+</h2>
+
+
+<div class="grid two">
+
+
+<label>
+
+  أمر المشرف /
+
+  <input
+    class="control"
+    value="/<%= game.command %>"
+    disabled
+  >
+
+</label>
+
+
+<label>
+
+  أمر الأعضاء !
+
+  <input
+    class="control"
+    name="alias_<%= game.key %>"
+    value="<%= aliases[game.key] %>"
+    maxlength="32"
+    required
+  >
+
+</label>
+
+
+</div>
+
+
+<label>
+
+  روم اللعبة
+
+  <select
+    class="control"
+    name="room_<%= game.key %>"
+    required
+  >
+
+    <option value="">
+      اختر الروم
+    </option>
+
+    <% channels.forEach(channel => { %>
+
+      <option
+        value="<%= channel.id %>"
+        <%= rooms[game.key] === channel.id ? "selected" : "" %>
+      >
+        # <%= channel.name %>
+      </option>
+
+    <% }) %>
+
+  </select>
+
+</label>
+
+
+<label>
+
+  من يستطيع بدء اللعبة؟
+
+  <select
+    class="control"
+    name="mode_<%= game.key %>"
+  >
+
+    <option
+      value="public"
+      <%= modes[game.key] === "public" ? "selected" : "" %>
+    >
+      👥 عامة
+    </option>
+
+    <option
+      value="staff"
+      <%= modes[game.key] === "staff" ? "selected" : "" %>
+    >
+      🛡️ مشرفين فقط
+    </option>
+
+  </select>
+
+</label>
+
+
+<p class="muted">
+
+  👤
+  <b><%= aliases[game.key] %></b>
+
+  &nbsp; | &nbsp;
+
+  🛡️
+  <b>/<%= game.command %></b>
+
+</p>
+
+
+</div>
+
+<% }) %>
+
+
+</div>
+
+
+<div class="panel">
+
+<h2>
+  🛡️ رولات المشرفين
+</h2>
+
+
+<div class="check-grid">
+
+<% roles.forEach(role => { %>
+
+<label class="check-item">
+
+<input
+  type="checkbox"
+  name="staffRoleIds"
+  value="<%= role.id %>"
+  <%= staffRoleIds.includes(role.id) ? "checked" : "" %>
+>
+
+<%= role.name %>
+
+</label>
+
+<% }) %>
+
+</div>
+
+
+</div>
+
+
+<button
+  class="btn success"
+>
+  💾 حفظ كل إعدادات الألعاب
+</button>
+
+
+</form>
+
+</div>
+
+</body>
+
+</html>
