@@ -20,6 +20,7 @@ const modules = [
   require("./modules/autoReplies"),
   require("./modules/credits"),
   require("./modules/betting"),
+  require("./modules/memberCommands"),
   require("./modules/games"),
   require("./modules/staffPanel")
 ];
